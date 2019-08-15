@@ -5,38 +5,67 @@ import {
     Image,
     TouchableOpacity,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    StatusBar,
+    AsyncStorage
 } from 'react-native'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
-export default class home extends Component {
+import { connect } from 'react-redux'
+import { getPattern } from '../publics/redux/action/pattern';
+import { patchScore } from '../publics/redux/action/score';
+class home extends Component {
     constructor(props) {
         super(props)
         this.state = {
             comboCount: 0,
-            pattern: [1, 2, 3, 4],
+            pattern: [],
             clicked: [],
             cekCombo: '',
+            currentScore: 0,
+            score: 0,
+            idUser: 0
         }
         console.warn(RNFS.ExternalDirectoryPath);
-
+    }
+    componentDidMount = async () => {
+        await this.props.dispatch(getPattern())
+        this.setState({ pattern: this.props.pattern.patternList[0] })
+        console.log(this.state.pattern);
+        await AsyncStorage.getItem('score', (error, result) => {
+            this.setState({ currentScore: result })
+        })
+        await AsyncStorage.getItem('idUser', (error, result) => {
+            this.setState({ idUser: result })
+            console.warn(result);
+        })
     }
     cek = (param) => {
+        clearTimeout(this.timerHandle)
         this.state.clicked.push(param)
         for (let i = 0; i < this.state.clicked.length; i++) {
-            if (this.state.pattern[i] === this.state.clicked[i]) {
-                if (i === this.state.pattern.length-1) {
-                    this.setState({comboCount:this.state.comboCount+1})
-                    this.setState({clicked : [],cekCombo:''})
+            if (Number(this.state.pattern.pattern.split(',')[i]) === Number(this.state.clicked[i])) {
+                if (i === this.state.pattern.pattern.split(',').length - 1) {
+                    this.setState({ comboCount: this.state.comboCount + 1, score: this.state.score + this.state.pattern.score })
+                    this.setState({ clicked: [], cekCombo: '' })
+                    console.log(this.state);
                 }
             } else {
-                this.setState({clicked : [],comboCount:0,cekCombo:''})
-                console.log(this.state.clicked)
+                console.warn(this.state.idUser);
+                if (this.state.idUser !== 0) {
+                    this.props.dispatch(patchScore({ score: this.state.score }, this.state.idUser))
+                }
+                this.setState({ clicked: [], comboCount: 0, cekCombo: '', score: 0 })
             }
         }
+        this.timerHandle = setTimeout(() => {   
+            this.setState({ clicked: [], cekCombo: '',score:0,comboCount:0 })    
+            this.timerHandle = 0;                  
+        }, 8000)
     }
+    guideline
     sound1 = async () => {
-        sound1 = new Sound(require('../assets/sound/sound1.wav'), (e) => { if (e) { console.log('Error in SOUND', e); return; } sound1.play(() => sound1.release()); })
+        sound1 = new Sound(require('/storage/emulated/0/Android/data/com.bukstack/files/1565775193836sound.wav'), (e) => { if (e) { console.log('Error in SOUND', e); return; } sound1.play(() => sound1.release()); })
         this.setState({
             cekCombo: () => {
                 this.cek(1)
@@ -71,16 +100,18 @@ export default class home extends Component {
     render() {
         return (
             <View>
+                <StatusBar hidden />
                 <View style={style.header}>
                     <TouchableOpacity style={[style.btnLeaderboard, { position: 'absolute', borderRadius: 50 }]} onPress={() => this.props.navigation.openDrawer()}>
                         <Image source={require('../assets/img/crown.png')} style={style.image} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={[style.btnLeaderboard, style.floatRight]}>
+                    <TouchableOpacity style={[style.btnLeaderboard, style.floatRight]} onPress={() => this.props.navigation.push('Leaderboard')}>
                         <Image source={require('../assets/img/crown.png')} style={style.image} />
                     </TouchableOpacity>
                 </View>
-                <ScrollView style={{ height: '100%', minHeight: 320 }}>
+                <ScrollView style={{ height: '100%', minHeight: 320 }} keyboardShouldPersistTaps={'always'}>
                     <View style={{ marginTop: '15%' }}>
+                        <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>Score : {this.state.score}</Text>
                         <Text style={{ textAlign: 'center', fontWeight: 'bold' }}>
                             Combo Hits : {this.state.comboCount}
                         </Text>
@@ -93,24 +124,24 @@ export default class home extends Component {
                         <Image source={require('../assets/img/home2.png')} style={[style.floatRight, { position: 'absolute', width: '50%', height: 200 }]} />
                         <Image source={require('../assets/img/home1.png')} style={[{ position: 'absolute', width: '50%', bottom: 0, height: 200 }]} />
                         <View style={{ flex: 0.6, flexDirection: "row", justifyContent: "center", marginTop: 40 }}>
-                            <TouchableOpacity style={{ width: 90, height: 100, marginHorizontal: 2 }} onPressIn={this.sound1}>
+                            <TouchableOpacity style={{ width: 90, height: 100, marginHorizontal: 2 }} onPressIn={this.sound1} activeOpacity={0.2}>
                                 <Text style={{ backgroundColor: '#d7d7d7', width: 90, height: 92, borderRadius: 50, position: "absolute", opacity: 0.5 }} />
                                 <Text style={{ backgroundColor: '#F7F7F7', width: 90, height: 90, borderRadius: 50, position: "absolute" }} />
                                 <Text style={{ backgroundColor: '#B7C8CB', width: 40, height: 40, borderRadius: 50, position: "absolute", alignSelf: "center", marginTop: 25 }} />
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ width: 90, height: 100, marginHorizontal: 2 }} onPressIn={this.sound2}>
+                            <TouchableOpacity style={{ width: 90, height: 100, marginHorizontal: 2 }} onPressIn={this.sound2} activeOpacity={0.2}>
                                 <Text style={{ backgroundColor: '#d7d7d7', width: 90, height: 92, borderRadius: 50, position: "absolute", opacity: 0.5 }} />
                                 <Text style={{ backgroundColor: '#F7F7F7', width: 90, height: 90, borderRadius: 50, position: "absolute" }} />
                                 <Text style={{ backgroundColor: '#B7C8CB', width: 40, height: 40, borderRadius: 50, position: "absolute", alignSelf: "center", marginTop: 25 }} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ flex: 2, flexDirection: "row", justifyContent: "center" }}>
-                            <TouchableOpacity style={{ width: 100, height: 100, marginHorizontal: 60 }} onPressIn={this.sound3}>
+                            <TouchableOpacity style={{ width: 100, height: 100, marginHorizontal: 60 }} onPressIn={this.sound3} activeOpacity={0.2}>
                                 <Text style={{ backgroundColor: '#d7d7d7', width: 100, height: 102, borderRadius: 50, position: "absolute", opacity: 0.5 }} />
                                 <Text style={{ backgroundColor: '#EECECE', width: 100, height: 100, borderRadius: 50, position: "absolute" }} />
                                 <Text style={{ backgroundColor: '#E3A6AE', width: 50, height: 50, borderRadius: 50, position: "absolute", alignSelf: "center", marginTop: 25 }} />
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ width: 100, height: 100, marginHorizontal: 60 }} onPressIn={this.sound4}>
+                            <TouchableOpacity style={{ width: 100, height: 100, marginHorizontal: 60 }} onPressIn={this.sound4} activeOpacity={0.2}>
                                 <Text style={{ backgroundColor: '#d7d7d7', width: 100, height: 102, borderRadius: 50, position: "absolute", opacity: 0.5 }} />
                                 <Text style={{ backgroundColor: '#EECECE', width: 100, height: 100, borderRadius: 50, position: "absolute" }} />
                                 <Text style={{ backgroundColor: '#E3A6AE', width: 50, height: 50, borderRadius: 50, position: "absolute", alignSelf: "center", marginTop: 25 }} />
@@ -125,7 +156,12 @@ export default class home extends Component {
         )
     }
 }
-
+const mapState = (state) => {
+    return {
+        pattern: state.pattern
+    }
+}
+export default connect(mapState)(home)
 const style = StyleSheet.create({
     header: {
         elevation: 8,

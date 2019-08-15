@@ -1,17 +1,18 @@
 import axios from 'axios'
 import {AsyncStorage} from 'react-native'
+import host from '../host'
 const localStorage = {
     token : AsyncStorage.getItem('token').then((result)=>{
         return result
     }),
-    id : AsyncStorage.getItem('id').then((result)=>{
+    id : AsyncStorage.getItem('idUser').then((result)=>{
         return result
     })
 }
-export const getUsers = (token,idUser) => {
+export const getUsers = () => {
     return {
         type: "GET_USERS",
-        payload: axios.get(`http://192.168.6.121:3300/user`,null,{
+        payload: axios.get(`${host}/user`,null,{
             headers:{
                 "x-access-token":`bearer ${localStorage.token}`,
                 "authorization":"Allow",
@@ -24,7 +25,7 @@ export const getUsers = (token,idUser) => {
 export const getByEmail = (data) => {
     return {
         type: "GET_BY_EMAIL",
-        payload: axios.post(`http://192.168.6.121:3300/user/login/`,data,{
+        payload: axios.post(`${host}/user/login/`,data,{
             headers:{
                 "authorization":"Allow",
             }
@@ -35,7 +36,7 @@ export const getByEmail = (data) => {
 export const register = (data) => {
     return {
         type: "REGISTER",
-        payload:axios.post(`http://192.168.6.121:3300/user/register`,data,{
+        payload:axios.post(`${host}/user/register`,data,{
             headers:{
                 "authorization":"Allow",
                 
@@ -44,10 +45,10 @@ export const register = (data) => {
     }
 }
 
-export const getToken = (token,idUser) =>{
+export const getToken = () =>{
     return{
         type: "GET_TOKEN",
-        payload:axios.post(`http://192.168.6.121:3300/user/getToken`,null,{
+        payload:axios.post(`${host}/user/getToken`,null,{
             headers:{
                 "x-access-token":`bearer ${localStorage.token}`,
                 "authorization":"Allow",

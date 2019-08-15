@@ -44,7 +44,7 @@ const AppNavigation = createStackNavigator(
         Leaderboard:{
             screen:Leaderboard,
             navigationOptions: {
-                headerLeft:<Text style={{fontFamily: 'Open Sans',
+                headerTitle:<Text style={{fontFamily: 'Open Sans',
                     fontStyle: 'normal',
                     fontWeight: 'bold',
                     fontSize: 18,}}>Leaderboard</Text>

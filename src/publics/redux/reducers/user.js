@@ -75,7 +75,7 @@ const user = (state = initialState, action) => {
         case "REGISTER_FULFILLED":
             if (typeof action.payload.data === 'object') {
                 for (let a = 0; a < Object.keys(action.payload.data).length; a++) {
-                    AsyncStorage.setItem(Object.keys(action.payload.data)[a], Object.values(action.payload.data)[a])
+                    AsyncStorage.setItem(Object.keys(action.payload.data)[a], String(Object.values(action.payload.data)[a]))
                 }
             }
             return {
