@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import {
-    ActivityIndicator
+    ActivityIndicator,
+    View,
+    Text
 } from 'react-native'
 const RNFS = require('react-native-fs')
 import { connect } from 'react-redux'
@@ -10,50 +12,53 @@ class cekSound extends Component {
         sound: []
     }
     componentDidMount = async () => {
-        await this.props.dispatch(getSounds())
-        this.setState({ sound: this.props.sound })
-        console.log(this.state.sound.soundList);
-        if (this.state.sound.soundList.length > 0) {
-            this.state.sound.soundList.forEach(async (item) => {
-                const pathFrom = `https://res.cloudinary.com/dboxbbxe4/video/upload/${item.url}`
-                const filename = item.url.split('/')[1]
-                const pathTo = `${RNFS.ExternalDirectoryPath}/${filename}`
-                console.log(`path from = ${pathFrom}, pathTo = ${pathTo}`);
+        // await this.props.dispatch(getSounds())
+        // this.setState({ sound: this.props.sound })
+        // if (this.state.sound.soundList.length > 0) {
+        //     await this.state.sound.soundList.forEach(async(item) => {
+        //         const pathFrom = `https://res.cloudinary.com/dboxbbxe4/video/upload/${item.url}`
+        //         const filename = item.url.split('/')[1]
+        //         const pathTo = `${RNFS.ExternalDirectoryPath}/${filename}`
+        //         console.log(`path from = ${pathFrom}, pathTo = ${pathTo}`);
 
-                RNFS.exists(pathTo).then(function (file) {
-                    if (!file) {
-                        const ret = RNFS.downloadFile({
-                            fromUrl: String(pathFrom),          // URL to download file from
-                            toFile: pathTo           // Local filesystem path to save the file to
-                            // headers?: Headers;        // An object of headers to be passed to the server
-                            // background?: boolean;
-                            // progressDivider?: number;
-                            // begin?: (res: DownloadBeginCallbackResult) => void;
-                            // progress?: (res: DownloadProgressCallbackResult) => void;
-                        })
-                        jobId = ret.jobId;
+        //         await RNFS.exists(pathTo).then(async(file) =>{
+        //             if (!file) {
+        //                 const ret = RNFS.downloadFile({
+        //                     fromUrl: String(pathFrom),          // URL to download file from
+        //                     toFile: pathTo           // Local filesystem path to save the file to
+        //                     // headers?: Headers;        // An object of headers to be passed to the server
+        //                     // background?: boolean;
+        //                     // progressDivider?: number;
+        //                     // begin?: (res: DownloadBeginCallbackResult) => void;
+        //                     // progress?: (res: DownloadProgressCallbackResult) => void;
+        //                 })
+        //                 jobId = ret.jobId;
 
-                        ret.promise.then(res => {
-                            // this.setState({ output: JSON.stringify(res) });
-                            // this.setState({ imagePath: { uri: 'file://' + downloadDest } });
-                            console.log(res);
-                            console.log('Test');
+        //                 await ret.promise.then(res => {
+        //                     // this.setState({ output: JSON.stringify(res) });
+        //                     // this.setState({ imagePath: { uri: 'file://' + downloadDest } });
+        //                     console.log(res);
+        //                     console.log('Test');
 
-                            jobId = -1;
-                        }).catch(err => {
-                            console.log(err)
+        //                     jobId = -1;
+        //                 }).catch(err => {
+        //                     console.log(err)
 
-                            jobId = -1;
-                        });
-                    }
-                }).catch(function (e) { console.log(e) })
-            })
-        }
+        //                     jobId = -1;
+        //                 });
+        //             }
+        //         }).catch(function (e) { console.log(e) })
+        //     })
+            this.props.navigation.navigate('Home')
+        // }
     }
     render() {
         console.log(this.state);
         return (
-            <ActivityIndicator size={'large'} color='#ddd' />
+            <View style={{marginTop:300}}>
+                <ActivityIndicator size={'large'} color='#ddd' />
+                <Text style={{textAlign:"center"}}>Loading For Your Opponent</Text>
+            </View>
         )
     }
 }

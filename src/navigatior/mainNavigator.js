@@ -23,12 +23,12 @@ const AppNavigation = createStackNavigator(
         // Splash : {
         //     screen:Splash,
         // },
-        // CekSound:{
-        //     screen:CekSound,
-        //     navigationOptions:{
-        //         header:null
-        //     }
-        // },
+        CekSound:{
+            screen:CekSound,
+            navigationOptions:{
+                header:null
+            }
+        },
         Home: {
             screen: HomeDrawer,
             navigationOptions: {
@@ -58,7 +58,7 @@ const AppNavigation = createStackNavigator(
         }
     },
     {
-        initialRouteName:'Home'
+        initialRouteName:'CekSound'
     }
 )
 

@@ -4,7 +4,7 @@ const intialState = {
     isRejected: false,
     isFulfilled: false
 }
-const book = (state = intialState, action) => {
+const sound = (state = intialState, action) => {
     switch (action.type) {
         case 'GET_SOUNDS_PENDING':
             return {
@@ -31,4 +31,4 @@ const book = (state = intialState, action) => {
     }
 }
 
-export default book
+export default sound
