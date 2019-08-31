@@ -2,6 +2,9 @@
 <p align="center">
 </p>
 <p align="center">
+<img src='https://media.sweetwater.com/api/i/q-82__ha-b8f9aaf4a89aeaed__hmac-2de6a95fe4d5848dbe6c0223bd4d109272c16d7b/images/items/750/Igniter-large.jpg' width="100">
+</p>
+<p align="center">
   Built with React Native.
 </p>
 
@@ -12,12 +15,10 @@
 - [Requirements](#requirements)
 - [Usage](#usage-for-development)
 - [Screenshots](#screenshots)
-- [Release APK](#release-apk)
-- [Related Project](#related-project-backend)
-- [Trello](#trello)
+- [Related Project](#related-project)
 
 ## Introduction
-Games
+Bug Stack game is drum game like real drum app 
 
 ## Features
 * Login , Logout & Register
@@ -32,20 +33,18 @@ Games
 
 ## Usage for development
 1. Open your terminal or command prompt
-2. Type `git clone https://github.com/mhdrare/Shovee-Frontend.git`
+2. Type `git clone https://github.com/zidni0192/bugStackGame`
 3. Open the folder and type `npm install` for install dependencies and `react-native link`
 4. Before run this, you must run backend first
 5. Type `react-native run-android` for run this app. ***Make sure your device is connected with debugging mode***.
 
-## Screenshots
+## Screenshoot
+<div align="center">
+    <img src="src/Screenshoot/screenshoot.jpg" width="200">
+    <img src="src/Screenshoot/screenshoot1.jpg"width="200">
+    <img src="src/Screenshoot/screenshoot2.jpg"width="200">
+</div>
+## Related Project
+* [Back End Bug Stack Game](https://github.com/zidni0192/bugStackGame-BackEnd)
 
-More [screenshots](https://github.com/mhdrare/Shovee-Frontend/blob/master/SCREENSHOTS.md) and if you want to watch demo application, [here](https://drive.google.com/drive/folders/17D_qxTKrwgAk3TM4RtXMcDOH84jINsTw?usp=sharing).
-
-## Release APK
-
-## Related Project (Backend)
-* [Shopee Clone RESTful API](https://github.com/mhdrare/Shovee-Backend.git)
-
-## Trello
-You can see the Trello for this project [`here`](https://trello.com/b/S0QGohuL/shopee-clone)
 
